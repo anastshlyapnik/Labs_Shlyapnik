@@ -9,13 +9,13 @@ using namespace std;
 
 struct Pipe {
     int Length, Diameter;
-    bool InRepair, IsExist;
+    bool InRepair, IsExist = false;
 };
 
 struct CompressorStation {
     string Name;
     int Workshops, WorkshopsInOperation, Efficiency;
-    bool IsExist;
+    bool IsExist=false;
 };
 
 void PrintMenu() {
@@ -30,6 +30,31 @@ void PrintMenu() {
     cout << "0. Exit" << endl;
 }
 
+void AddPipe(Pipe& pipe) {
+    if (not pipe.IsExist) {
+        cout << "Enter the length of the pipe\n";
+        cin >> pipe.Length;
+        do {
+            cout << "Wrong request! Try again!\n";
+            pipe.Length = 0;
+            cin.clear();
+            cin.ignore(INT_MAX, '\n');
+            cin >> pipe.Length;
+        } while ((!pipe.Length)||(pipe.Length<0));
+        cout << "Enter the diameter of the pipe\n";
+        cin >> pipe.Diameter;
+        do {
+            cout << "Wrong request! Try again!\n";
+            pipe.Diameter = 0;
+            cin.clear();
+            cin.ignore(INT_MAX, '\n');
+            cin >> pipe.Diameter;
+        } while ((!pipe.Diameter)||(pipe.Diameter<0));
+        pipe.IsExist = true;
+        cout << "Pipe added!\n\n";
+    }
+    else cout << "Pipe is already exist!\n";
+}
 
 int main()
 {
@@ -40,8 +65,7 @@ int main()
         cin >> request1;
         switch (request1) {
         case 1:
-     
-           
+            AddPipe(pipe1);
             break;
         case 2:
            
