@@ -56,9 +56,47 @@ void AddPipe(Pipe& pipe) {
     else cout << "Pipe is already exist!\n";
 }
 
+void AddCompStation(CompressorStation& CS) {
+    if (not CS.IsExist) {
+        cout << "Enter the name of the station\n";
+        cin >> CS.Name;
+        cout << "Enter the number of the workshops\n";
+        cin >> CS.Workshops;
+        do {
+            cout << "Wrong request! Try again!\n";
+            CS.Workshops = 0;
+            cin.clear();
+            cin.ignore(INT_MAX, '\n');
+            cin >> CS.Workshops;
+        } while ((!CS.Workshops) || (CS.Workshops < 0));
+        cout << "Enter the number of the workshops in operation\n";
+        cin >> CS.WorkshopsInOperation;
+        do {
+            cout << "Wrong request! Try again!\n";
+            CS.WorkshopsInOperation = 0;
+            cin.clear();
+            cin.ignore(INT_MAX, '\n');
+            cin >> CS.WorkshopsInOperation;
+        } while ((!CS.WorkshopsInOperation) || (CS.WorkshopsInOperation < 0)||(CS.WorkshopsInOperation>CS.Workshops));
+        cout << "Enter the efficiency of the compressor station\n";
+        cin >> CS.Efficiency;
+        do {
+            cout << "Wrong request! Try again!\n";
+            CS.Efficiency = 0;
+            cin.clear();
+            cin.ignore(INT_MAX, '\n');
+            cin >> CS.Efficiency;
+        } while ((!CS.Efficiency) || (CS.Efficiency < 0));
+        CS.IsExist = true;
+        cout << "Compressor station added!\n\n";
+    }
+    else cout << "Compressor station is already exist!\n";
+}
+
 int main()
 {
     Pipe pipe1{};
+    CompressorStation CompStat1;
     int request1;
     do {
         PrintMenu();
@@ -68,7 +106,7 @@ int main()
             AddPipe(pipe1);
             break;
         case 2:
-           
+            AddCompStation(CompStat1);
             break;
         case 3:
            
