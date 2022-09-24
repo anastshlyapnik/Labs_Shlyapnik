@@ -38,30 +38,16 @@ void ResponseChecking(T& input) {
 }
 
 void AddPipe(Pipe& pipe) {
-    
     if (not pipe.IsExist) { 
         cout << "Enter the length of the pipe\n";
-        cin >> pipe.Length;
         ResponseChecking(pipe.Length);
         cout << "Enter the diameter of the pipe\n";
-        cin >> pipe.Diameter;
-        while ((!pipe.Diameter) || (pipe.Diameter < 0)) {
-            cout << "Wrong request! Try again!\n";
-            pipe.Diameter = 0;
-            cin.clear();
-            cin.ignore(INT_MAX, '\n');
-            cin >> pipe.Diameter;
-        }
+        ResponseChecking(pipe.Diameter);
         cout << "Enter the pipe state: '0' if it is not in repair, '1' if it is under repair\n";
-        while ((cin >> pipe.InRepair).fail()) {
-            cout << "Wrong request! Try again!\n";
-            cin.clear();
-            cin.ignore(INT_MAX, '\n');
-        }
+        ResponseChecking(pipe.InRepair);
         pipe.IsExist = true;
         cout << "Pipe added!\n\n";
-    }
-    else cout << "Pipe is already exist!\n";
+    } else cout << "Pipe is already exist!\n";
 }
 
 void AddCompStation(CompressorStation& CS) {
@@ -70,74 +56,79 @@ void AddCompStation(CompressorStation& CS) {
         cin.ignore();
         //getline(cin, CS.Name);
         cout << "Enter the number of the workshops\n";
-        cin >> CS.Workshops;
-        while ((!CS.Workshops) || (CS.Workshops < 0)) {
-            cout << "Wrong request! Try again!\n";
-            CS.Workshops = 0;
-            cin.clear();
-            cin.ignore(INT_MAX, '\n');
-            cin >> CS.Workshops;
-        }
+        ResponseChecking(CS.Workshops);
         cout << "Enter the number of the workshops in operation\n";
-        cin >> CS.WorkshopsInOperation;
-        while ((!CS.WorkshopsInOperation) || (CS.WorkshopsInOperation < 0) || (CS.WorkshopsInOperation > CS.Workshops)) {
+        ResponseChecking(CS.WorkshopsInOperation);
+        while (CS.Workshops< CS.WorkshopsInOperation) {
             cout << "Wrong request! Try again!\n";
-            CS.WorkshopsInOperation = 0;
-            cin.clear();
-            cin.ignore(INT_MAX, '\n');
-            cin >> CS.WorkshopsInOperation;
+            ResponseChecking(CS.WorkshopsInOperation);
         }
         cout << "Enter the efficiency of the compressor station\n";
-        cin >> CS.Efficiency;
-        while ((!CS.Efficiency) || (CS.Efficiency < 0)){
-            cout << "Wrong request! Try again!\n";
-            CS.Efficiency = 0;
-            cin.clear();
-            cin.ignore(INT_MAX, '\n');
-            cin >> CS.Efficiency;
-        } 
+        ResponseChecking(CS.Efficiency);
         CS.IsExist = true;
         cout << "Compressor station added!\n\n";
-    }
-    else cout << "Compressor station is already exist!\n";
+    } else cout << "Compressor station is already exist!\n";
 }
 
 void ViewObjects(Pipe pipe, CompressorStation CS) {
     if (pipe.IsExist) {
-        cout << "Pipe info:\n" << "-Length: " << pipe.Length << "\n-Diameter: " << pipe.Diameter << "\n-In Repair: ";
+        cout << "Pipe info:\n" << "- Length: " << pipe.Length << "\n- Diameter: " << pipe.Diameter << "\n- In Repair: ";
         if (pipe.InRepair) {
             cout << "Yes\n";
-        }
-        else cout << "No\n";
-    }
-    else cout << "Pipe is not added!\n\n";
+        } else cout << "No\n";
+    } else cout << "Pipe is not added!\n\n";
 
     if (CS.IsExist) {
-        cout << "Compressor station info:\n" << "-Name: " << CS.Name << "\n-Number of workshops: " << CS.Workshops << "\n-Number of workshops in operation: " << CS.WorkshopsInOperation << "\n-Efficiency: " << CS.Efficiency << endl;
+        cout << "Compressor station info:\n" << "- Name: " << CS.Name << "\n- Number of workshops: " << CS.Workshops << "\n- Number of workshops in operation: " << CS.WorkshopsInOperation << "\n- Efficiency: " << CS.Efficiency << endl;
     }
     else cout << "Compressor station is not added!\n\n";
 }
 
-void EditPipe(Pipe pipe) { // не доделано
+void EditPipe(Pipe& pipe) {
     if (pipe.IsExist) {
-        cout << "Pipe info:\n" << "-Length: " << pipe.Length << "\n-Diameter: " << pipe.Diameter << "\n-In Repair: ";
-        if (pipe.InRepair) {
-            cout << "Yes\n";
-        }
-        else cout << "No\n";
-    }
-    else cout << "Pipe is not added!\n\n";
+        cout << "Enter the pipe state: '0' if it is not in repair, '1' if it is under repair\n";
+        ResponseChecking(pipe.InRepair);
+    } else cout << "Pipe is not added!\n\n";
 }
 
-int main()
-{
-    Pipe Pipe1{};
+void EditCS(CompressorStation& CS) {
+    if (CS.IsExist) {
+        cout << "Enter the number of workshops in operation\n";
+        ResponseChecking(CS.WorkshopsInOperation);
+    }  else cout << "Compressor station is not added!\n\n";
+}
+
+void SaveInfo(Pipe pipe, CompressorStation CS) {
+    ofstream fout("data.txt");
+    if (pipe.IsExist) {
+        fout << pipe.Length << "\n" << pipe.Diameter << "\n" << pipe.InRepair;
+    }
+    if (CS.IsExist) {
+        fout << CS.Name << "\n" << CS.Workshops << "\n" << CS.WorkshopsInOperation << "\n" << CS.Efficiency << endl;
+    }
+    cout << "Changes successfully saved!\n";
+    fout.close(); 
+}
+
+void DownloadInfo(Pipe& pipe, CompressorStation& CS) {
+    ifstream fin("data.txt");
+    fin >> pipe.Length >> pipe.Diameter >> pipe.InRepair;
+    //>> CS.Name
+    fin >> CS.Workshops >> CS.WorkshopsInOperation >> CS.Efficiency;
+    CS.IsExist = true;
+    pipe.IsExist = true;
+    cout << "Changes successfully saved!\n";
+    fin.close();
+}
+
+int main() {
+    Pipe Pipe1;
     CompressorStation CompStat1;
-    int request1;
+    int request;
     do {
         PrintMenu();
-        cin >> request1;
-        switch (request1) {
+        cin >> request;
+        switch (request) {
         case 1:
             AddPipe(Pipe1);
             break;
@@ -151,22 +142,21 @@ int main()
             EditPipe(Pipe1);
             break;
         case 5:
-            //EditCS(CompStat1);
+            EditCS(CompStat1);
             break;
         case 6:
-          
+            SaveInfo(Pipe1, CompStat1);
             break;
         case 7:
-            
+            DownloadInfo(Pipe1, CompStat1);
             break;
         default:
             cout << "Wrong request! Try again!\n";
             break;
         }
 
-    } while (request1 != 0);
+    } while (request != 0);
     cout << "Goodbye!";
-    //system("pause");
     return 0;
 }
 
