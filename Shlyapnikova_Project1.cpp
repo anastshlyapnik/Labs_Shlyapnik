@@ -3,7 +3,9 @@
 
 #include <iostream>
 #include <fstream>
+#include <string>
 using namespace std;
+
 
 struct Pipe {
     int Length, Diameter;
@@ -54,7 +56,7 @@ void AddCompStation(CompressorStation& CS) {
     if (not CS.IsExist) {
         cout << "Enter the name of the station\n";
         cin.ignore();
-        //getline(cin, CS.Name);
+        getline(cin,CS.Name);
         cout << "Enter the number of the workshops\n";
         ResponseChecking(CS.Workshops);
         cout << "Enter the number of the workshops in operation\n";
@@ -99,7 +101,8 @@ void EditCS(CompressorStation& CS) {
 }
 
 void SaveInfo(Pipe pipe, CompressorStation CS) {
-    ofstream fout("data.txt");
+    ofstream fout;
+    fout.open("data.txt");
     if (pipe.IsExist) {
         fout << pipe.Length << "\n" << pipe.Diameter << "\n" << pipe.InRepair;
     }
@@ -111,13 +114,14 @@ void SaveInfo(Pipe pipe, CompressorStation CS) {
 }
 
 void DownloadInfo(Pipe& pipe, CompressorStation& CS) {
-    ifstream fin("data.txt");
+    ifstream fin;
+    fin.open("data.txt");
     fin >> pipe.Length >> pipe.Diameter >> pipe.InRepair;
-    //>> CS.Name
+    getline(fin,CS.Name);
     fin >> CS.Workshops >> CS.WorkshopsInOperation >> CS.Efficiency;
     CS.IsExist = true;
     pipe.IsExist = true;
-    cout << "Changes successfully saved!\n";
+    cout << "Information successfully downloaded!\n";
     fin.close();
 }
 
@@ -154,7 +158,6 @@ int main() {
             cout << "Wrong request! Try again!\n";
             break;
         }
-
     } while (request != 0);
     cout << "Goodbye!";
     return 0;
