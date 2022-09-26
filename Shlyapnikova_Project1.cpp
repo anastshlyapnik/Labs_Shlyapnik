@@ -30,6 +30,7 @@ void PrintMenu() {
     cout << "0. Exit" << endl;
 
 }
+
 template <typename T>
 void ResponseChecking(T& input) {
     while ((cin>>input).fail()||input<0) {
@@ -88,15 +89,19 @@ void ViewObjects(Pipe pipe, CompressorStation CS) {
 
 void EditPipe(Pipe& pipe) {
     if (pipe.IsExist) {
-        cout << "Enter the pipe state: '0' if it is not in repair, '1' if it is under repair\n";
+        cout << "Change the pipe state: '0' if it is not in repair, '1' if it is under repair\n";
         ResponseChecking(pipe.InRepair);
     } else cout << "Pipe is not added!\n\n";
 }
 
 void EditCS(CompressorStation& CS) {
     if (CS.IsExist) {
-        cout << "Enter the number of workshops in operation\n";
+        cout << "Change the number of workshops in operation\n";
         ResponseChecking(CS.WorkshopsInOperation);
+        while (CS.Workshops < CS.WorkshopsInOperation) {
+            cout << "Wrong request! Try again!\n";
+            ResponseChecking(CS.WorkshopsInOperation);
+        }
     }  else cout << "Compressor station is not added!\n\n";
 }
 
@@ -116,13 +121,16 @@ void SaveInfo(Pipe pipe, CompressorStation CS) {
 void DownloadInfo(Pipe& pipe, CompressorStation& CS) {
     ifstream fin;
     fin.open("data.txt");
-    fin >> pipe.Length >> pipe.Diameter >> pipe.InRepair;
-    getline(fin,CS.Name);
-    fin >> CS.Workshops >> CS.WorkshopsInOperation >> CS.Efficiency;
-    CS.IsExist = true;
-    pipe.IsExist = true;
-    cout << "Information successfully downloaded!\n";
-    fin.close();
+    if (fin.is_open()){
+        fin >> pipe.Length >> pipe.Diameter >> pipe.InRepair;
+        fin.ignore();
+        getline(fin, CS.Name);
+        fin >> CS.Workshops >> CS.WorkshopsInOperation >> CS.Efficiency;
+        CS.IsExist = true;
+        pipe.IsExist = true;
+        cout << "Data successfully uploaded!\n";
+        fin.close();
+    } else cout << "Data has not been downloaded! Try again!\n";
 }
 
 int main() {
