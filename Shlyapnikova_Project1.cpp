@@ -32,8 +32,8 @@ void PrintMenu() {
 }
 
 template <typename T>
-void ResponseChecking(T& input) {
-    while ((cin>>input).fail()||input<0) {
+void ResponseChecking(T& data) {
+    while ((cin>>data).fail()||(data<0)) {
         cout << "Wrong request! Try again!\n";
         cin.clear();
         cin.ignore(INT_MAX, '\n');
