@@ -8,14 +8,13 @@ using namespace std;
 
 
 struct Pipe {
-    int Length, Diameter;
-    bool InRepair, IsExist = false;
+    int Length, Diameter =0;
+    bool InRepair;
 };
 
 struct CompressorStation {
     string Name;
-    int Workshops, WorkshopsInOperation, Efficiency;
-    bool IsExist=false;
+    int Workshops, WorkshopsInOperation, Efficiency=0;
 };
 
 void PrintMenu() {
@@ -41,20 +40,19 @@ void ResponseChecking(T& data) {
 }
 
 void AddPipe(Pipe& pipe) {
-    if (not pipe.IsExist) { 
+    if (pipe.Length==0) { 
         cout << "Enter the length of the pipe\n";
         ResponseChecking(pipe.Length);
         cout << "Enter the diameter of the pipe\n";
         ResponseChecking(pipe.Diameter);
         cout << "Enter the pipe state: '0' if it is not in repair, '1' if it is under repair\n";
         ResponseChecking(pipe.InRepair);
-        pipe.IsExist = true;
         cout << "Pipe added!\n\n";
     } else cout << "Pipe is already exist!\n";
 }
 
 void AddCompStation(CompressorStation& CS) {
-    if (not CS.IsExist) {
+    if (CS.Workshops==0) {
         cout << "Enter the name of the station\n";
         cin.ignore();
         getline(cin,CS.Name);
@@ -73,7 +71,7 @@ void AddCompStation(CompressorStation& CS) {
     } else cout << "Compressor station is already exist!\n";
 }
 
-void ViewObjects(Pipe pipe, CompressorStation CS) {
+void ViewObjects(const Pipe& pipe, const CompressorStation& CS) {
     if (pipe.IsExist) {
         cout << "Pipe info:\n" << "- Length: " << pipe.Length << "\n- Diameter: " << pipe.Diameter << "\n- In Repair: ";
         if (pipe.InRepair) {
@@ -105,7 +103,7 @@ void EditCS(CompressorStation& CS) {
     }  else cout << "Compressor station is not added!\n\n";
 }
 
-void SaveInfo(Pipe pipe, CompressorStation CS) {
+void SaveInfo(const Pipe& pipe, const CompressorStation& CS) {
     ofstream fout;
     fout.open("data.txt");
     if (pipe.IsExist) {
@@ -126,8 +124,6 @@ void DownloadInfo(Pipe& pipe, CompressorStation& CS) {
         fin.ignore();
         getline(fin, CS.Name);
         fin >> CS.Workshops >> CS.WorkshopsInOperation >> CS.Efficiency;
-        CS.IsExist = true;
-        pipe.IsExist = true;
         cout << "Data successfully uploaded!\n";
         fin.close();
     } else cout << "Data has not been downloaded! Try again!\n";
