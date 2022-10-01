@@ -30,7 +30,7 @@ void PrintMenu() {
 
 }
 
-template <typename T>
+template <typename T> //http://cppstudio.com/post/5188/
 void DataInput(T& data) {
     while ((cin>>data).fail()||(data<0)) {
         cout << "Wrong request! Try again!\n";
