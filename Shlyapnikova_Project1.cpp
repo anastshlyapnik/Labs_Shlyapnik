@@ -8,13 +8,13 @@ using namespace std;
 
 
 struct Pipe {
-    int Length, Diameter =0;
+    int Length=0, Diameter =0;
     bool InRepair;
 };
 
 struct CompressorStation {
     string Name;
-    int Workshops, WorkshopsInOperation, Efficiency=0;
+    int Workshops=0, WorkshopsInOperation=0, Efficiency=0;
 };
 
 void PrintMenu() {
@@ -31,7 +31,7 @@ void PrintMenu() {
 }
 
 template <typename T>
-void ResponseChecking(T& data) {
+void DataInput(T& data) {
     while ((cin>>data).fail()||(data<0)) {
         cout << "Wrong request! Try again!\n";
         cin.clear();
@@ -42,11 +42,11 @@ void ResponseChecking(T& data) {
 void AddPipe(Pipe& pipe) {
     if (pipe.Length==0) { 
         cout << "Enter the length of the pipe\n";
-        ResponseChecking(pipe.Length);
+        DataInput(pipe.Length);
         cout << "Enter the diameter of the pipe\n";
-        ResponseChecking(pipe.Diameter);
+        DataInput(pipe.Diameter);
         cout << "Enter the pipe state: '0' if it is not in repair, '1' if it is under repair\n";
-        ResponseChecking(pipe.InRepair);
+        DataInput(pipe.InRepair);
         cout << "Pipe added!\n\n";
     } else cout << "Pipe is already exist!\n";
 }
@@ -54,65 +54,67 @@ void AddPipe(Pipe& pipe) {
 void AddCompStation(CompressorStation& CS) {
     if (CS.Workshops==0) {
         cout << "Enter the name of the station\n";
-        cin.ignore();
-        getline(cin,CS.Name);
+        getline(cin>>ws,CS.Name);
         cout << "Enter the number of the workshops\n";
-        ResponseChecking(CS.Workshops);
+        DataInput(CS.Workshops);
         cout << "Enter the number of the workshops in operation\n";
-        ResponseChecking(CS.WorkshopsInOperation);
-        while (CS.Workshops< CS.WorkshopsInOperation) {
-            cout << "Wrong request! Try again!\n";
-            ResponseChecking(CS.WorkshopsInOperation);
-        }
+        do {
+            cout << "Enter a number from 0 to " << CS.Workshops << "\n";
+            DataInput(CS.WorkshopsInOperation);
+        } while (CS.Workshops < CS.WorkshopsInOperation);
         cout << "Enter the efficiency of the compressor station\n";
-        ResponseChecking(CS.Efficiency);
-        CS.IsExist = true;
+        DataInput(CS.Efficiency);
+
         cout << "Compressor station added!\n\n";
     } else cout << "Compressor station is already exist!\n";
 }
 
 void ViewObjects(const Pipe& pipe, const CompressorStation& CS) {
-    if (pipe.IsExist) {
+    if (pipe.Length!=0) {
         cout << "Pipe info:\n" << "- Length: " << pipe.Length << "\n- Diameter: " << pipe.Diameter << "\n- In Repair: ";
         if (pipe.InRepair) {
             cout << "Yes\n";
         } else cout << "No\n";
     } else cout << "Pipe is not added!\n\n";
 
-    if (CS.IsExist) {
+    if (CS.Workshops!=0) {
         cout << "Compressor station info:\n" << "- Name: " << CS.Name << "\n- Number of workshops: " << CS.Workshops << "\n- Number of workshops in operation: " << CS.WorkshopsInOperation << "\n- Efficiency: " << CS.Efficiency << endl;
     }
     else cout << "Compressor station is not added!\n\n";
 }
 
 void EditPipe(Pipe& pipe) {
-    if (pipe.IsExist) {
+    if (pipe.Length!=0) {
         cout << "Change the pipe state: '0' if it is not in repair, '1' if it is under repair\n";
-        ResponseChecking(pipe.InRepair);
+        DataInput(pipe.InRepair);
+        cout << "Changes successfully saved!\n";
     } else cout << "Pipe is not added!\n\n";
 }
 
 void EditCS(CompressorStation& CS) {
-    if (CS.IsExist) {
+    if (CS.Workshops!=0) {
         cout << "Change the number of workshops in operation\n";
-        ResponseChecking(CS.WorkshopsInOperation);
-        while (CS.Workshops < CS.WorkshopsInOperation) {
-            cout << "Wrong request! Try again!\n";
-            ResponseChecking(CS.WorkshopsInOperation);
-        }
+        do {
+            cout << "Enter a number from 0 to "<<CS.Workshops<<"\n";
+            DataInput(CS.WorkshopsInOperation);
+        } while (CS.Workshops < CS.WorkshopsInOperation);
+        cout << "Changes successfully saved!\n";
     }  else cout << "Compressor station is not added!\n\n";
 }
 
 void SaveInfo(const Pipe& pipe, const CompressorStation& CS) {
     ofstream fout;
     fout.open("data.txt");
-    if (pipe.IsExist) {
-        fout << pipe.Length << "\n" << pipe.Diameter << "\n" << pipe.InRepair;
+    if (fout.is_open()) {
+        if (pipe.Length!=0) {
+            fout << pipe.Length << "\n" << pipe.Diameter << "\n" << pipe.InRepair;
+        }
+        if (CS.Workshops!=0) {
+            fout << CS.Name << "\n" << CS.Workshops << "\n" << CS.WorkshopsInOperation << "\n" << CS.Efficiency << endl;
+        }
+        cout << "Changes successfully saved!\n";
     }
-    if (CS.IsExist) {
-        fout << CS.Name << "\n" << CS.Workshops << "\n" << CS.WorkshopsInOperation << "\n" << CS.Efficiency << endl;
-    }
-    cout << "Changes successfully saved!\n";
+    else cout << "Data has not been saved! Try again!\n";
     fout.close(); 
 }
 
@@ -130,33 +132,33 @@ void DownloadInfo(Pipe& pipe, CompressorStation& CS) {
 }
 
 int main() {
-    Pipe Pipe1;
-    CompressorStation CompStat1;
+    Pipe Pipe;
+    CompressorStation CompStat;
     int request;
     do {
         PrintMenu();
         cin >> request;
         switch (request) {
         case 1:
-            AddPipe(Pipe1);
+            AddPipe(Pipe);
             break;
         case 2:
-            AddCompStation(CompStat1);
+            AddCompStation(CompStat);
             break;
         case 3:
-            ViewObjects(Pipe1, CompStat1);
+            ViewObjects(Pipe, CompStat);
             break;
         case 4:
-            EditPipe(Pipe1);
+            EditPipe(Pipe);
             break;
         case 5:
-            EditCS(CompStat1);
+            EditCS(CompStat);
             break;
         case 6:
-            SaveInfo(Pipe1, CompStat1);
+            SaveInfo(Pipe, CompStat);
             break;
         case 7:
-            DownloadInfo(Pipe1, CompStat1);
+            DownloadInfo(Pipe, CompStat);
             break;
         default:
             cout << "Wrong request! Try again!\n";
