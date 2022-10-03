@@ -41,10 +41,12 @@ void DataInput(T& data) {
 
 void AddPipe(Pipe& pipe) {
     if (pipe.Length==0) { 
-        cout << "Enter the length of the pipe\n";
-        DataInput(pipe.Length);
-        cout << "Enter the diameter of the pipe\n";
-        DataInput(pipe.Diameter);
+        do {
+            cout << "Enter the non-zero length of the pipe\n";
+            DataInput(pipe.Length);
+            cout << "Enter the non-zero diameter of the pipe\n";
+            DataInput(pipe.Diameter);
+        } while ((pipe.Diameter == 0) || (pipe.Length == 0));
         cout << "Enter the pipe state: '0' if it is not in repair, '1' if it is under repair\n";
         DataInput(pipe.InRepair);
         cout << "Pipe added!\n\n";
@@ -55,8 +57,10 @@ void AddCompStation(CompressorStation& CS) {
     if (CS.Workshops==0) {
         cout << "Enter the name of the station\n";
         getline(cin>>ws,CS.Name);
-        cout << "Enter the number of the workshops\n";
-        DataInput(CS.Workshops);
+        do {
+            cout << "Enter the non-zero number of the workshops\n";
+            DataInput(CS.Workshops);
+        } while (CS.Workshops == 0);
         cout << "Enter the number of the workshops in operation\n";
         do {
             cout << "Enter a number from 0 to " << CS.Workshops << "\n";
@@ -138,6 +142,7 @@ int main() {
     do {
         PrintMenu();
         cin >> request;
+        DataInput(request);
         switch (request) {
         case 1:
             AddPipe(Pipe);
