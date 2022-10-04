@@ -6,7 +6,6 @@
 #include <string>
 using namespace std;
 
-
 struct Pipe {
     int Length=0, Diameter =0;
     bool InRepair;
