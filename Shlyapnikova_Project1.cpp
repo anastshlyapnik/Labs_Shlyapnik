@@ -127,8 +127,7 @@ void DownloadInfo(Pipe& pipe, CompressorStation& CS) {
     fin.open("data.txt");
     if (fin.is_open()){
         fin >> pipe.Length >> pipe.Diameter >> pipe.InRepair;
-        fin.ignore();
-        getline(fin, CS.Name);
+        getline(fin>>ws, CS.Name);
         fin >> CS.Workshops >> CS.WorkshopsInOperation >> CS.Efficiency;
         cout << "Data successfully uploaded!\n";
         fin.close();
