@@ -141,7 +141,6 @@ int main() {
     int request;
     do {
         PrintMenu();
-        cin >> request;
         DataInput(request);
         switch (request) {
         case 1:
@@ -165,12 +164,14 @@ int main() {
         case 7:
             DownloadInfo(Pipe, CompStat);
             break;
+        case 0:
+            cout << "Goodbye!";
+            break;
         default:
             cout << "Wrong request! Try again!\n";
             break;
         }
     } while (request != 0);
-    cout << "Goodbye!";
     return 0;
 }
 
