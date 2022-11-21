@@ -6,7 +6,7 @@
 #include <float.h>
 #include <unordered_map>
 #include <unordered_set>
-
+#include "checking.h"
 
 using namespace std;
 
