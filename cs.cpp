@@ -10,20 +10,21 @@
 
 using namespace std;
 
-int MaxCSId = 0;
+int CompressorStation::MaxCSId = 0;
 istream& operator>> (istream& in, CompressorStation& CS)
 {
     cout << "\nIndex of cs: " << CS.CSId;
-    cout << "\nInput name ";
+    cout << "\nEnter the name: ";
     cin.clear();
     cin.ignore(INT_MAX, '\n');
     getline(cin, CS.Name);
-    cout << "\nNumber of workshops ";
-    //CS.Workshops = NumberChecking(0, INT_MAX);
-    cout << "\nNumber of workshops in operation ";
-    //CS.WorkshopsInOperation = NumberChecking(0, CS.Workshops);
+    cout << "\nEnter the number of workshops: ";
+    CS.Workshops = NumberChecking(0, INT_MAX);
+    cout << "\nEnter the number of workshops in operation: ";
+    CS.WorkshopsInOperation = NumberChecking(0, CS.Workshops);
     cout << "\nEnter the efficiency ";
-    //CS.Efficiency = NumberChecking(0, 100);
+    CS.Efficiency = NumberChecking(0, 100);
+    cout << "\nCS added successfully\n";
     return in;
 }
 ostream& operator<< (ostream& out, CompressorStation& CS) {
@@ -34,10 +35,10 @@ ostream& operator<< (ostream& out, CompressorStation& CS) {
 }
 
 void CompressorStation::EditCS() {
-    cout << "Workshops: " << Workshops << endl;
-    cout << "Working workshop: " << WorkshopsInOperation << endl;
+    cout << "Number of workshops: " << Workshops << endl;
+    cout << "Number of working workshops: " << WorkshopsInOperation << endl;
     cout << "Enter new number of working workshops" << endl;
-    //WorkshopsInOperation = NumberChecking(0, Workshops);
+    WorkshopsInOperation = NumberChecking(0, Workshops);
 }
 void CompressorStation::SaveCSInfo(ofstream& file) {
     file << CSId << endl << Name << endl

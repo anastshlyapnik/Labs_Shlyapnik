@@ -18,33 +18,32 @@ string StatusChecking(bool x)
 int Pipe::MaxPipeId = 0;
 istream& operator>> (istream& in, Pipe& p)
 {
-    cout << "\n Index of pipe: " << p.PipeId;
-    cout << "\n Input Name ";
-
+    cout << "\nIndex of the pipe: " << p.PipeId;
+    cout << "\nEnter the name: ";
     cin.clear();
     cin.ignore(INT_MAX, '\n');
-
     getline(cin, p.Name);
-    cout << "\nInput length ";
+    cout << "\nEnter the length: ";
     p.length = NumberChecking(0.0, DBL_MAX);
-    cout << "\nInput diameter ";
+    cout << "\nEnter the diameter: ";
     p.diameter = NumberChecking(0.0, DBL_MAX);
-    cout << "\nChoose status of pipe (0 if repairing, 1 if works) ";
+    cout << "\nSelect the pipe state: 0 - in repair, 1 - is working ";
     p.status = NumberChecking(0, 1);
-    cout << StatusChecking(p.status) << endl;
+    cout << "\nPipe added successfully\n";
+    //cout << StatusChecking(p.status) << endl;
     return in;
 }
 ostream& operator<< (ostream& out, Pipe& p) {
-    out << "\nIndex of pipe: " << p.PipeId << "\nPipe info: " << "\nName: " << p.Name << "\nLenght: "
-        << p.length << "\nDiameter : " << p.diameter
-        << "\nStatus: " << StatusChecking(p.status) << endl;
+    out << "\nIndex of pipe: " << p.PipeId << "\nPipe info: " << "\n- Name: " << p.Name << "\n- Length: "
+        << p.length << "\n- Diameter : " << p.diameter
+        << "\n- Status: " << StatusChecking(p.status) << endl;
     return out;
 }
 void Pipe::EditPipe() {
     cout << "Status: " << StatusChecking(status) << endl;
-    cout << "Enter new status of pipe (0 if in repairing, 1 if works)" << endl;
+    cout << "Select the new pipe state: 0 - in repair, 1 - is working" << endl;
     status = NumberChecking(0, 1);
-    cout << StatusChecking(status) << endl;;
+    //cout << StatusChecking(status) << endl;
 }
 void Pipe::SavePipeInfo(ofstream& file) {
     file << PipeId << endl << Name << endl << length << endl << diameter << endl << status << endl;

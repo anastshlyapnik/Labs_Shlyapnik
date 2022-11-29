@@ -18,7 +18,7 @@ public: static int MaxCSId;
       void EditCS();
       void LoadCSInfo(ifstream& file);
       int GetCSId() { return CSId; }
-      double Get() { return (((double)Workshops - (double)WorkshopsInOperation) / (double)Workshops) * 100; }
+      double GetUsing() { return (((double)Workshops - (double)WorkshopsInOperation) / (double)Workshops) * 100; }
       string Name = "";
 
 
