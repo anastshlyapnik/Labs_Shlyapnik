@@ -24,7 +24,7 @@ istream& operator>> (istream& in, CompressorStation& CS)
     CS.WorkshopsInOperation = NumberChecking(0, CS.Workshops);
     cout << "\nEnter the efficiency ";
     CS.Efficiency = NumberChecking(0, 100);
-    cout << "\nCS added successfully\n";
+    cout << "\nCS added successfully!\n";
     return in;
 }
 ostream& operator<< (ostream& out, CompressorStation& CS) {

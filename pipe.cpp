@@ -10,9 +10,9 @@
 
 string StatusChecking(bool x)
 {
-    if (x == true)
+    if (x)
         return ("Pipe is working");
-    else if (x == false)
+    else 
         return ("Pipe is repairing");
 }
 int Pipe::MaxPipeId = 0;

@@ -36,7 +36,7 @@ bool CheckingCSName(CompressorStation& cs, string Name) {
     return (cs.Name.find(Name) != string::npos);
 }
 bool CheckingWork(CompressorStation& cs, double p) {
-    return (cs.GetUsing() >= p);
+    return (cs.GetUsing() == p);
 }
 
 vector<int> SearchPipe(unordered_map <int, Pipe>& PipeGroup) {
@@ -338,7 +338,7 @@ int main() {
     int request;
 
     do {
-        cout << "Hello! Enter the number of the required item:" << endl
+        cout << "\nHello! Enter the number of the required item:" << endl
             << "1. Add a pipe" << endl
             << "2. Add a compressor station" << endl
             << "3. Viewing all objects" << endl
